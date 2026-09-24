@@ -1,0 +1,1541 @@
+/* =========================================================================
+   SAL - Security Audit Log Tool
+   Visual design system
+   - SAP Fiori-inspired, matching the SSAT (SAP Security Assessment Tool)
+     sibling app's design system 1:1 on tokens/components - see
+     `SAP Security Assessment Tool/src/webapp/static/style.css` as the
+     reference implementation this was re-themed from (2026-09-22).
+   - Full `prefers-color-scheme: dark` support, plus an explicit in-app
+     toggle (data-theme="dark"/"light" on <html>, set by app.js).
+   - All functional class/id hooks used by app.js are preserved as-is;
+     only presentation (color, spacing, elevation, type) has changed.
+   ========================================================================= */
+
+:root {
+  /* ---- Brand chrome (Fiori shell bar - flat fill, same both themes
+     unless overridden below) --- */
+  --shell-bg: #354a5e;
+  --shell-text: #ffffff;
+  --shell-text-muted: rgba(255, 255, 255, 0.78);
+  --shell-control-bg: rgba(255, 255, 255, 0.1);
+  --shell-control-border: rgba(255, 255, 255, 0.3);
+  --shell-control-bg-hover: rgba(255, 255, 255, 0.18);
+  --focus-ring-on-dark: #8fc4ff;
+
+  /* ---- Surfaces & text -------------------------------------------------- */
+  --page-bg: #f5f6f7;
+  --surface: #ffffff;
+  --surface-alt: #f5f6f7;
+  --surface-hover: #f0f2f4;
+  --surface-sunken: #eef1f4;
+  --border: #e5e5e5;
+  --border-strong: #d0d3d6;
+  --text: #32363a;
+  --text-secondary: #6a6d70;
+  --text-tertiary: #8b8f92;
+
+  /* ---- Accent / interactive (Fiori's signature blue) --------------------- */
+  --accent: #0a6ed1;
+  --accent-hover: #085caf;
+  --accent-active: #064a8c;
+  --accent-text: #0a6ed1;
+  --accent-soft: #eaf2fb;
+  --accent-soft-border: #c8d9ec;
+  --focus-ring: #0a6ed1;
+
+  /* ---- Status / severity (Fiori semantic colors: good/warning/critical) - */
+  --sev-high: #bb0000;
+  --sev-high-bg: #ffebeb;
+  --sev-medium: #92670a;
+  --sev-medium-bg: #fef7e5;
+  --sev-low: #6a6d70;
+  --sev-low-bg: #eef1f4;
+  --ok: #107e3e;
+  --ok-bg: #e8f6ee;
+
+  /* ---- Environment tiers (Home page tiles) -------------------------------
+     Mapped to the exact dot colors SSAT's sidenav already uses for the same
+     concept (.dot-sandbox/development/quality/production), not the
+     severity palette above - an environment tier is not a severity. */
+  --env-production: #bb0000;
+  --env-sandbox: #8b9096;
+  --env-quality: #92670a;
+  --env-development: #0a6ed1;
+
+  /* ---- Elevation (Fiori: flat, tight radius; --radius-lg only for the
+     modal, matching SSAT's actual per-component values) -------------------- */
+  --radius-sm: 4px;
+  --radius: 4px;
+  --radius-lg: 6px;
+  --shadow-sm: 0 0 0 1px rgba(0, 0, 0, 0.06);
+  --shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.3);
+  --overlay-bg: rgba(0, 0, 0, 0.35);
+
+  /* ---- Misc -------------------------------------------------------------- */
+  --skeleton-a: #eef1f4;
+  --skeleton-b: #f8f9fa;
+  --input-bg: #ffffff;
+  --input-border: #e5e5e5;
+  --input-border-hover: #c0c4c8;
+  --track-bg: #cfe0f2;
+}
+
+/* Dark tokens apply when the browser prefers dark AND the user hasn't
+   explicitly chosen light in-app, OR when the user has explicitly chosen
+   dark in-app (regardless of browser preference) - see the theme toggle
+   in app.js, which sets data-theme on <html> and persists it to
+   localStorage. No data-theme attribute set = follow the browser. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --shell-bg: #1f2933;
+
+    --page-bg: #14181d;
+    --surface: #1c2229;
+    --surface-alt: #1c2229;
+    --surface-hover: #242b33;
+    --surface-sunken: #191f25;
+    --border: #2c333c;
+    --border-strong: #3a424c;
+    --text: #e7eaee;
+    --text-secondary: #94a0ac;
+    --text-tertiary: #6f7a85;
+
+    --accent: #4c9bef;
+    --accent-hover: #6bacf2;
+    --accent-active: #82bcf5;
+    --accent-text: #4c9bef;
+    --accent-soft: #1c3654;
+    --accent-soft-border: #28405c;
+    --focus-ring: #4c9bef;
+
+    --sev-high: #ff6b6b;
+    --sev-high-bg: #3a1616;
+    --sev-medium: #e8b64a;
+    --sev-medium-bg: #362a10;
+    --sev-low: #94a0ac;
+    --sev-low-bg: #242b33;
+    --ok: #38c778;
+    --ok-bg: #123322;
+
+    --env-production: #ff6b6b;
+    --env-sandbox: #7b8794;
+    --env-quality: #e8b64a;
+    --env-development: #4c9bef;
+
+    --shadow-sm: 0 0 0 1px rgba(0, 0, 0, 0.4);
+    --shadow: 0 0 0 1px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+    --overlay-bg: rgba(0, 0, 0, 0.55);
+
+    --skeleton-a: #1c2229;
+    --skeleton-b: #242b33;
+    --input-bg: #1c2229;
+    --input-border: #3a424c;
+    --input-border-hover: #4c5560;
+    --track-bg: #2c4666;
+  }
+}
+
+:root[data-theme="dark"] {
+  --shell-bg: #1f2933;
+
+  --page-bg: #14181d;
+  --surface: #1c2229;
+  --surface-alt: #1c2229;
+  --surface-hover: #242b33;
+  --surface-sunken: #191f25;
+  --border: #2c333c;
+  --border-strong: #3a424c;
+  --text: #e7eaee;
+  --text-secondary: #94a0ac;
+  --text-tertiary: #6f7a85;
+
+  --accent: #4c9bef;
+  --accent-hover: #6bacf2;
+  --accent-active: #82bcf5;
+  --accent-text: #4c9bef;
+  --accent-soft: #1c3654;
+  --accent-soft-border: #28405c;
+  --focus-ring: #4c9bef;
+
+  --sev-high: #ff6b6b;
+  --sev-high-bg: #3a1616;
+  --sev-medium: #e8b64a;
+  --sev-medium-bg: #362a10;
+  --sev-low: #94a0ac;
+  --sev-low-bg: #242b33;
+  --ok: #38c778;
+  --ok-bg: #123322;
+
+  --env-production: #ff6b6b;
+  --env-sandbox: #7b8794;
+  --env-quality: #e8b64a;
+  --env-development: #4c9bef;
+
+  --shadow-sm: 0 0 0 1px rgba(0, 0, 0, 0.4);
+  --shadow: 0 0 0 1px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --overlay-bg: rgba(0, 0, 0, 0.55);
+
+  --skeleton-a: #1c2229;
+  --skeleton-b: #242b33;
+  --input-bg: #1c2229;
+  --input-border: #3a424c;
+  --input-border-hover: #4c5560;
+  --track-bg: #2c4666;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: none;
+  color: #ffffff;
+  opacity: 0.9;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { background: rgba(255, 255, 255, 0.12); opacity: 1; }
+.theme-toggle svg { width: 16px; height: 16px; }
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: '72', '72full', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  /* Safety net for narrow/zoomed viewports (UAT GEN-07: a fixed-size
+     element - e.g. .sidenav's 220px, or .theme-toggle's 32px box, or
+     .actor-label's white-space:nowrap - not shrinking below the viewport
+     width previously grew the whole page horizontally instead of just
+     clipping/wrapping. The page itself must never scroll horizontally
+     (see the sidenav/shellbar responsive rule below for the actual fix -
+     this is the backstop for anything else that slips through). */
+  overflow-x: hidden;
+}
+
+/* Plain content links (job names in tables, inline "See Jobs"/"Back to
+   Jobs" links, etc.) - anything that doesn't set its own color otherwise
+   falls back to the raw browser default (blue, purple once visited),
+   which reads as unstyled next to the rest of the app's own palette.
+   Low specificity on purpose (a bare `a`, no class) so every existing
+   classed link - nav items, buttons-as-links, tiles, menu items - keeps
+   winning on its own more-specific rule; this only catches the ones that
+   had no styling at all. :visited is pinned to the same color as a fresh
+   link: "have I opened this job before" isn't meaningful here the way it
+   is on the open web. */
+a {
+  color: var(--accent-text);
+  text-decoration: none;
+  text-underline-offset: 2px;
+  transition: color 0.12s ease;
+}
+a:visited { color: var(--accent-text); }
+a:hover, a:focus-visible { color: var(--accent-hover); text-decoration: underline; }
+
+@media (prefers-reduced-motion: reduce) {
+  * , *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link - hidden until keyboard-focused */
+.skip-link {
+  position: fixed;
+  top: -3rem;
+  left: 0.75rem;
+  z-index: 100;
+  background: var(--surface);
+  color: var(--accent-text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--shadow-lg);
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 0.75rem; }
+
+/* Global focus visibility */
+:focus { outline: none; }
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Shell bar - flat Fiori fill, 44px, no gradient/accent-line (SSAT reference:
+   .shellbar { height: 44px; background: var(--shell-bg); }) */
+.shellbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding: 0 12px;
+  background: var(--shell-bg);
+  color: var(--shell-text);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.shellbar-left { display: flex; align-items: center; gap: 10px; }
+.shellbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.35rem;
+  margin: -0.2rem -0.35rem;
+  transition: background-color 0.12s ease;
+}
+/* text-decoration: none is repeated here (not just in the base
+   .shellbar-brand rule above) because the global `a:hover,
+   a:focus-visible { ...; text-decoration: underline; }` rule has equal-or-
+   higher specificity than a hover/focus rule that only sets `background` -
+   the cascade resolves text-decoration per-property, so without this the
+   global underline still won on hover/focus even though this element's own
+   rules "looked" more specific overall (real bug caught in UAT retest). */
+.shellbar-brand:hover { background: rgba(255, 255, 255, 0.12); text-decoration: none; }
+.shellbar-brand:focus-visible { text-decoration: none; }
+/* Bare icon, no tinted badge box - matches SSAT's .shellbar-logo (icon only,
+   color: #fff, opacity: .9; no background/padding/shadow). */
+.shellbar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+.shellbar-title { font-size: 16px; font-weight: 600; letter-spacing: 0.01em; }
+.shellbar-title em {
+  font-style: normal;
+  font-weight: 400;
+  opacity: 0.78;
+  margin-left: 0.55rem;
+  font-size: 0.82rem;
+}
+
+.shellbar-right { display: flex; align-items: center; gap: 0.6rem; }
+
+.system-select {
+  background: var(--shell-control-bg);
+  color: #ffffff;
+  border: 1px solid var(--shell-control-border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.65rem;
+  font-size: 0.82rem;
+  max-width: 320px;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+.system-select:hover { background: var(--shell-control-bg-hover); }
+.system-select option, .system-select optgroup { color: #1a1a1a; }
+.shellbar :focus-visible { outline-color: var(--focus-ring-on-dark); }
+
+.actor-label {
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--shell-text-muted);
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--shell-control-border);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.actor-label:hover, .actor-label:focus-visible {
+  background: var(--shell-control-bg-hover);
+  color: #ffffff;
+}
+
+/* At phone width, .shellbar-right's cluster (system select, actor label -
+   which is white-space:nowrap by design so a long name never wraps mid-
+   word, plus the fixed 32px theme-toggle square) doesn't have room to sit
+   on one line next to the brand - shrink/hide what's safe to rather than
+   let the row overflow the viewport (UAT GEN-07: the fixed-size theme
+   toggle "box" was the most visible symptom of this). */
+@media (max-width: 640px) {
+  .system-select { max-width: 120px; font-size: 0.74rem; }
+  .actor-label { max-width: 70px; overflow: hidden; text-overflow: ellipsis; }
+}
+
+/* Layout */
+.layout { display: flex; min-height: calc(100vh - 44px); align-items: stretch; }
+
+.sidenav {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 1rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/* At phone width (~400px, this app's own responsive floor) a fixed 220px
+   sidenav alone eats over half the viewport - narrow it and let its own
+   labels wrap onto two lines rather than forcing the whole layout wider
+   than the screen (UAT GEN-07). */
+@media (max-width: 640px) {
+  .sidenav { width: 84px; padding: 1rem 0.35rem; }
+  .sidenav a { flex-direction: column; gap: 0.2rem; padding: 0.5rem 0.3rem; text-align: center; font-size: 0.68rem; }
+  .sidenav-section { display: none; }
+}
+
+.sidenav a {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.75rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  position: relative;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.sidenav a svg { flex-shrink: 0; color: var(--text-tertiary); transition: color 0.12s ease; }
+.sidenav a:hover { background: var(--surface-hover); color: var(--text); }
+.sidenav a:hover svg { color: var(--accent); }
+/* Flat fill only, no left accent bar - matches SSAT's .sidenav-item.active
+   (background: var(--active-bg); color: var(--accent); no side indicator). */
+.sidenav a.active {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-weight: 650;
+}
+.sidenav a.active svg { color: var(--accent); }
+
+.sidenav-section {
+  display: block;
+  margin: 0;
+  padding: 0.9rem 0.75rem 0.3rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-tertiary);
+}
+.sidenav-section:first-child { padding-top: 0.2rem; }
+
+/* Home page: full-width picker, no per-system chrome yet - the sidenav and
+   shellbar quick-switch only make sense once a system has been chosen (see
+   app.js's route()), so both are hidden while body carries this class. */
+body.route-home .sidenav { display: none; }
+body.route-home .system-select { display: none; }
+body.route-home main#app { max-width: 1100px; margin: 0 auto; }
+
+main#app {
+  flex: 1;
+  padding: 1.75rem 2.25rem 3rem;
+  /* No hard max-width here (deliberately, since a previous 1280px cap was
+     the exact cause of a real bug - GEN-07 retest): browser zoom changes
+     how many CSS pixels fit in the window, so a fixed px cap increasingly
+     under-fills the available width as zoom decreases, which read as
+     "tables don't resize/expand when I zoom out" even though nothing was
+     actually broken - the cap was just always winning first. Letting
+     flex: 1 fill whatever width .sidenav (fixed width, flex-shrink: 0)
+     leaves free means wide data tables (Jobs/Findings/Recovery) genuinely
+     use the extra room at any zoom level or viewport width, while
+     .table-scroll's overflow-x: auto still handles the opposite case (too
+     little room, e.g. narrow/phone widths) unchanged. */
+}
+main#app:focus-visible { outline-offset: -2px; }
+
+/* Page-enter transition - route() (app.js) does a 4-step toggle around
+   navigation: (1) jump straight to .page-enter (opacity:0, no transition
+   yet - see below), (2) force a reflow so the browser commits that
+   invisible state, (3) add .page-transition (now the transition below is
+   live), (4) on the next frame, remove .page-enter so opacity/transform
+   animate back to rest. Found in UAT testing (GEN-03): an earlier version
+   put the transition directly on main#app unconditionally, which meant
+   step (1) itself *also* animated (already-visible content briefly
+   fading to invisible before fading back in) - a flicker that read as "no
+   transition happened" rather than a clean fade-in. Splitting the
+   transition onto its own class, added only after the instant jump to
+   invisible, means jumping TO invisible is instant (nothing to see, same
+   frame as the content swap) and only the return to visible animates. */
+main#app.page-enter { opacity: 0; transform: translateY(6px); }
+main#app.page-transition { transition: opacity 0.18s ease, transform 0.18s ease; }
+
+/* Typography helpers */
+.page-head {
+  margin-bottom: 1.1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+.page-head h1 {
+  flex-basis: 100%;
+  margin: 0 0 0.35rem;
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.page-head > p.muted { flex-basis: 100%; margin: 0; }
+.page-head .btn-primary,
+.page-head .btn-secondary { margin-right: 0; }
+
+/* Groups a page-head's action buttons so they read as one toolbar rather
+   than a loose row of identical pills - a thin divider separates the
+   primary action (e.g. Sync) from the secondary cluster next to it. */
+.toolbar { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+.toolbar-divider { width: 1px; height: 22px; background: var(--border-strong); flex-shrink: 0; }
+
+.muted { color: var(--text-secondary); font-size: 0.85rem; }
+.ok { color: var(--ok); font-weight: 600; }
+.error { color: var(--sev-high); font-weight: 600; }
+
+/* KPI tiles */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+.tiles-secondary { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+.tile {
+  display: block;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 1.05rem 1.2rem;
+  text-decoration: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+}
+a.tile, button.tile { cursor: pointer; }
+a.tile:hover, button.tile:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--border-strong);
+}
+a.tile:focus-visible, button.tile:focus-visible { outline-offset: -2px; }
+.tiles-hint { margin: -0.5rem 0 1rem; }
+
+.tile-value {
+  font-size: 2rem;
+  font-weight: 750;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.tile-label {
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 0.4rem;
+}
+.tile-high { border-top-color: var(--sev-high); }
+.tile-high .tile-value { color: var(--sev-high); }
+.tile-medium { border-top-color: var(--sev-medium); }
+.tile-medium .tile-value { color: var(--sev-medium); }
+.tile-low { border-top-color: var(--sev-low); }
+.tile-low .tile-value { color: var(--sev-low); }
+.tile-neutral { border-top-color: var(--accent); }
+.tile-neutral .tile-value { color: var(--accent-text); }
+
+/* System picker tiles (Home page) - same 176x176 Fiori tile footprint as
+   SSAT's own .tile/.viz-stat-card, retargeted to Fiori's flatter treatment:
+   4px radius, --shadow-sm/--shadow (flat/hover-lift) pair, and a bare
+   (unboxed) icon rather than a tinted badge - the same simplification
+   SSAT's own .tile-icon uses (color only, no background). A tile is a
+   compound control: the select button covers the whole tile, and the
+   "more actions" popover + missing-credentials flag are absolutely
+   positioned siblings layered on top (a button can't nest another
+   button). */
+.system-section { margin-bottom: 1.5rem; }
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 176px);
+  gap: 0.85rem;
+}
+.fiori-tile {
+  position: relative;
+  width: 176px;
+  height: 176px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.14s ease, transform 0.14s ease, border-color 0.14s ease;
+}
+.fiori-tile:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: var(--border-strong); }
+.fiori-tile-select {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  width: 100%;
+  height: 100%;
+  padding: 0.9rem 0.9rem 0.8rem;
+  background: none;
+  border: none;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* Some tiles (e.g. Password Manager) use a real <a> here instead of a
+   <button> - same reasoning as the .tile/system-picker case below: pure
+   navigation with no extra JS wiring needed. But the global `a:hover,
+   a:focus-visible { color: var(--accent-hover); text-decoration:
+   underline; }` rule (higher specificity than the plain .fiori-tile-select
+   rule above, since a:hover pairs an element with a pseudo-class) still
+   wins on hover, making the tile's title/subtitle text underline and
+   recolor like an inline hyperlink - inconsistent with every button-based
+   tile, which only shows the shared .fiori-tile:hover lift/shadow.
+   Reasserting color/text-decoration at equal-or-higher specificity here
+   keeps every tile's hover feedback the same regardless of which element
+   it's built from. */
+.fiori-tile-select:hover,
+.fiori-tile-select:focus-visible,
+.fiori-tile-select:visited {
+  color: inherit;
+  text-decoration: none;
+}
+.fiori-tile-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--env-c, var(--accent));
+}
+.fiori-tile-icon svg { width: 24px; height: 24px; }
+.fiori-tile-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.fiori-tile-subtitle { font-size: 0.76rem; color: var(--text-secondary); }
+.fiori-tile-pill {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: auto;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--env-c, var(--accent));
+  background: color-mix(in srgb, var(--env-c, var(--accent)) 14%, transparent);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+/* The generic .menu-panel opens BELOW its trigger (top: calc(100% + 6px))
+   - fine for the Findings page's Export button, but for this tiny
+   26px-square cornered trigger, "below" still lands inside the tile
+   (176px tall), on top of its own icon/title. Flaring the panel out to
+   the LEFT of the trigger instead keeps it visibly tethered to the exact
+   button that opened it and clear of the tile's own content, rather than
+   appearing to belong to whatever happens to be further down the grid.
+
+   Selector here is `.fiori-tile .fiori-tile-menu`, not the bare class -
+   this element also carries the generic `.menu` class (position:
+   relative, needed elsewhere for the Findings page's Export menu), and a
+   bare `.fiori-tile-menu { position: absolute }` has EQUAL specificity to
+   `.menu`'s rule - whichever is declared later in the file silently wins
+   the tied property. That previously let `.menu`'s position:relative
+   win, putting this element back in normal document flow - after the
+   tile's own full-height select button, i.e. visibly below the tile
+   rather than pinned to its corner. Nesting under `.fiori-tile` raises
+   specificity enough to make the override unconditional, regardless of
+   source order. */
+.fiori-tile .fiori-tile-menu { position: absolute; top: 0.4rem; right: 0.4rem; z-index: 1; }
+.fiori-tile-menu .menu-panel { top: 0; right: calc(100% + 6px); }
+/* Selector is `.fiori-tile .fiori-tile-flag`, not the bare class - same
+   specificity-tie problem as `.fiori-tile-menu` above, on a different
+   element: this span also carries [data-tooltip] (position: relative,
+   added by the HOME-01 fix), which has equal specificity to a bare
+   `.fiori-tile-flag` and is declared later in this file, so it silently
+   won the tied `position` property - pulling the flag out of its
+   absolutely-positioned corner and into normal document flow, rendering
+   it below the tile instead of pinned inside it (real bug caught in the
+   Round 2 UAT retest: "the icon is out of the systems box now"). Nesting
+   under `.fiori-tile` raises specificity enough to make this
+   unconditional, regardless of source order - same reasoning as the
+   `.fiori-tile-menu` comment above. */
+.fiori-tile .fiori-tile-flag {
+  position: absolute;
+  bottom: 0.65rem;
+  right: 0.7rem;
+  display: inline-flex;
+  color: var(--sev-medium);
+}
+
+/* Instant CSS tooltip (no native browser hover delay) - found in UAT
+   (HOME-01): the credentials-missing flag relied only on a native
+   title="" tooltip, easy to miss on a quick hover given most browsers
+   delay it by a second or more. Generic on [data-tooltip] so any other
+   icon-only control can reuse it later. */
+[data-tooltip] { position: relative; cursor: help; }
+[data-tooltip]:hover::after, [data-tooltip]:focus-visible::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  max-width: 220px;
+  width: max-content;
+  background: var(--text);
+  color: var(--page-bg);
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.4;
+  box-shadow: var(--shadow-lg);
+  z-index: 40;
+  pointer-events: none;
+}
+
+.fiori-tile-add { box-shadow: none; border-style: dashed; background: var(--surface-alt); }
+.fiori-tile-add .fiori-tile-select {
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 0.5rem;
+  color: var(--accent-text);
+  font-weight: 650;
+}
+.fiori-tile-add:hover { border-color: var(--accent); background: var(--accent-soft); transform: none; }
+
+/* Panels - same 4px flat radius as tiles/tables everywhere else, except an
+   explicit 8px here: Fiori's own "elevated card" components (SSAT's
+   .viz-donut-card/.dash-kpi-card) read as one step more substantial than a
+   plain flat tile, and a .panel plays that same "elevated card" role. */
+.panels {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .panels { grid-template-columns: 1fr; }
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  padding: 1.2rem 1.3rem;
+}
+.panel h2 {
+  margin: 0 0 1rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.panel-head-actions { display: inline-flex; gap: 0.5rem; text-transform: none; letter-spacing: normal; }
+
+/* Bar list */
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.65rem;
+  padding: 0.2rem 0.3rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.12s ease;
+}
+.bar-row:hover, .bar-row:focus-visible { background: var(--surface-hover); }
+.bar-row:hover .bar-label, .bar-row:focus-visible .bar-label { color: var(--accent-text); }
+.bar-label {
+  width: 210px;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.12s ease;
+}
+.bar-track { flex: 1; background: var(--track-bg); border-radius: 4px; height: 9px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+.bar-count { width: 32px; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Donut */
+.donut-wrap { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+svg.donut { width: 128px; height: 128px; flex-shrink: 0; }
+.donut-seg { transition: stroke-width 0.15s ease; }
+.donut-high { stroke: var(--sev-high); }
+.donut-medium { stroke: var(--sev-medium); }
+.donut-low { stroke: var(--sev-low); }
+.donut-total { font-size: 20px; font-weight: 750; fill: var(--text); }
+
+.legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.83rem; }
+.legend li { display: flex; align-items: center; }
+.legend strong { margin-left: 1.25rem; font-variant-numeric: tabular-nums; }
+.legend-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 0.5rem; flex-shrink: 0; }
+.legend-high { background: var(--sev-high); }
+.legend-medium { background: var(--sev-medium); }
+.legend-low { background: var(--sev-low); }
+.legend-ontrack { background: var(--ok); }
+
+/* SLA stacked-bar chart (Dashboard, DASH-07) - one row per severity, each a
+   track stacked with on_track/at_risk/breached segments sized by flex-grow.
+   Reuses the same bucket colors as the badges in the table below it. */
+.sla-chart { margin-bottom: 1rem; }
+.sla-chart-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+.sla-chart-row .badge { width: 68px; justify-content: center; flex-shrink: 0; }
+.sla-chart-track {
+  flex: 1;
+  height: 14px;
+  background: var(--track-bg);
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+}
+.sla-chart-seg { flex-basis: 0; min-width: 3px; }
+.sla-chart-seg-on-track { background: var(--ok); }
+.sla-chart-seg-at-risk { background: var(--sev-medium); }
+.sla-chart-seg-breached { background: var(--sev-high); }
+.sla-chart-empty { flex-grow: 1; background: transparent; }
+.sla-chart-legend { flex-direction: row; gap: 1.1rem; margin-top: 0.6rem; font-size: 0.78rem; }
+
+/* Tables - Fiori's flat, uppercase-header treatment (matches SSAT's
+   table.checks-table exactly: --shadow-sm/flat 4px radius, uppercase 11px
+   gray headers on --surface-alt). */
+table.findings, table.result {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin-top: 0.85rem;
+  font-size: 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  /* No overflow:hidden here (previously present for corner-rounding) - it
+     clipped any .menu-panel dropdown (e.g. a row's "Data" export menu,
+     or a column-header filter panel) that opens near the table's own
+     edge, since overflow:hidden on this element clips ITS OWN box, not
+     just a wrapping .table-scroll's. Reported live: the Job Detail page's
+     Job Log table has few enough rows that the "Data" dropdown's panel
+     had nowhere to go but under the table's clipped bottom edge, hiding
+     every option (Docs/Error Screenshots/Download Button Error.png). The
+     table's border-radius still rounds its own outer border either way;
+     only the header/zebra-row backgrounds keep square pixel-level corners
+     under it now, which reads as effectively invisible next to a working
+     dropdown. */
+}
+table.findings th, table.findings td,
+table.result th, table.result td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+table.findings th {
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--surface-alt);
+}
+table.findings tbody tr { transition: background-color 0.1s ease; }
+/* Alternating row shading + extra row padding (FIND-06, 2026-09-16) - subtle
+   zebra striping so a dense findings table stays scannable row-to-row, and a
+   touch more vertical breathing room than the tighter .result key/value table. */
+table.findings tbody tr:nth-child(even) { background: var(--surface-sunken); }
+table.findings td { padding-top: 0.8rem; padding-bottom: 0.8rem; }
+table.findings tbody tr:hover { background: var(--surface-hover); }
+table.findings tbody tr:last-child td { border-bottom: none; }
+table.findings tbody tr:has(.disp-status:focus-visible),
+table.findings tbody tr:has(.disp-reason:focus-visible) { background: var(--accent-soft); }
+
+/* Severity accent bar + bolder severity/rule treatment (FIND-06) - the left
+   edge of each row is tinted by severity (inset box-shadow, since a plain
+   border on <tr> doesn't paint with border-collapse: separate), reinforcing
+   the severity badge without having to read it. badge-lg only widens the
+   Severity column's badge specifically, leaving the shared .badge look used
+   everywhere else in the app untouched. */
+table.findings tbody tr.sev-row-high td:first-child { box-shadow: inset 3px 0 0 var(--sev-high); }
+table.findings tbody tr.sev-row-medium td:first-child { box-shadow: inset 3px 0 0 var(--sev-medium); }
+table.findings tbody tr.sev-row-low td:first-child { box-shadow: inset 3px 0 0 var(--sev-low); }
+.badge-lg { padding: 0.3rem 0.8rem; font-size: 0.76rem; font-weight: 800; }
+.rule-label { font-weight: 600; color: var(--text); }
+
+table.result th { width: 150px; color: var(--text-secondary); font-weight: 600; background: var(--surface-alt); }
+
+/* Job Detail's parameters table (jobFiltersHtml) uses a <th scope="row"> for
+   its label column (accessibility grouping for exploded multi-value rows,
+   JOB-09/JD-01) - without this override it would inherit table.findings th's
+   thead-style look (uppercase, small, alt background) since that rule isn't
+   scoped to <thead>. */
+table.findings tbody th.mono {
+  font-weight: 400;
+  font-size: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+  background: transparent;
+  color: inherit;
+}
+
+/* Badges - Fiori-flat small rounded-rect tag (not a full pill), matching
+   SSAT's .env-pill/.scope-tag radius. Color is always paired with text; a
+   dot reinforces it further. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+.badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+.badge-high { background: var(--sev-high-bg); color: var(--sev-high); }
+.badge-medium { background: var(--sev-medium-bg); color: var(--sev-medium); }
+.badge-low { background: var(--sev-low-bg); color: var(--sev-low); }
+.badge-success { background: var(--ok-bg); color: var(--ok); }
+
+/* "Live" (queued/running job) status - pulses just the badge's own dot, not
+   the whole pill, so it reads as "still active" without being distracting.
+   A dedicated class rather than tying this to .badge-medium/.badge-low
+   directly, since those same classes are reused for unrelated badges (e.g.
+   job Priority) that must not pulse. */
+.badge-live::before { animation: badge-live-pulse 1.6s ease-in-out infinite; }
+@keyframes badge-live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(1.5); }
+}
+
+/* Inline warning glyph next to a job's Status badge when it has an error
+   message - the Error column itself is hidden by default (see JOB_COLUMNS
+   in app.js), so this keeps a failure visible without it. */
+.status-error-flag {
+  display: inline-flex;
+  vertical-align: middle;
+  color: var(--sev-high);
+  cursor: help;
+}
+
+/* Collect form */
+.req { color: var(--sev-high); }
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+@media (max-width: 700px) {
+  .field-grid { grid-template-columns: 1fr; }
+}
+/* display:block, not flex-direction:column - a label's content is inline
+   text plus an optional trailing ".req" asterisk span, and flex stacks
+   *every* child (including that span) onto its own row, dropping the
+   asterisk onto its own line below the label text instead of beside it.
+   Block flow keeps the inline text+span together on one line; only the
+   input/select (forced to display:block below) wraps to the next line. */
+.field-grid label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.field-grid label > input,
+.field-grid label > select {
+  display: block;
+  margin-top: 0.35rem;
+}
+.field-grid input { font-size: 0.88rem; }
+.field-grid .field-full { grid-column: 1 / -1; }
+
+/* Panels: secondary heading below the main h2 (e.g. dashboard SLA panel's
+   "Most overdue" sub-table) - same type ramp as .panel h2 without repeating
+   its border-bottom divider. */
+.panel-subhead {
+  margin: 1.25rem 0 0.6rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+/* A one-line caption inside a panel (e.g. the SLA panel's methodology note).
+   Deliberately NOT .muted - a bare `<p class="muted">` as a direct child of
+   .panel matches the empty-state selector below and would wrongly render as
+   a large dashed placeholder card instead of a plain caption line. */
+.panel-caption { margin: 0 0 0.9rem; color: var(--text-secondary); font-size: 0.85rem; }
+
+/* Wide tables (Jobs, Systems) can scroll horizontally rather than overflow
+   the page at narrow widths/high zoom - keeps SC 1.4.10 (Reflow) intact
+   without shrinking column content illegibly.
+
+   min-height added after a real bug caught in the Round 2 UAT retest
+   (JOB-02/JOB-03): setting overflow-x here forces the browser to also
+   treat overflow-y as non-visible (an unspecified overflow-y computes to
+   the SAME non-"visible" value as an explicit overflow-x per the CSS
+   Overflow spec) - so this element clips any descendant that visually
+   extends past its own box, not just horizontally. A column-header
+   filter's dropdown panel (.menu-panel, position: absolute, opening
+   downward from a <th> inside this container - see columnFilterHeaderHtml
+   in app.js) normally has plenty of room below it because the table is
+   tall with real rows. But once a filter combination matches zero rows,
+   <tbody> collapses to a single one-line "No jobs match..." row, the
+   whole container shrinks to roughly header-row height, and the SAME
+   dropdown panel now extends well past that short box's bottom edge -
+   getting clipped/cut off ("the filters box goes inside the table box")
+   instead of floating visibly below it. A generous min-height keeps the
+   container tall enough to hold the tallest filter panel even when the
+   table itself has nothing to show. */
+.table-scroll { overflow-x: auto; min-height: 300px; }
+
+/* Inline callout - informational note, not an error/success state. Used for
+   the "no password field" notice on the Systems form/page. Built from the
+   existing accent-soft tokens rather than new ones. */
+.callout {
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-soft-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+.callout code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  background: var(--surface-sunken);
+  padding: 0.05rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.78rem;
+}
+#systemsNotice .callout { margin-bottom: 1.1rem; }
+
+/* Jobs page - inline mini progress bar per row, reusing the same .bar-fill
+   color as the dashboard's "Findings by rule" bars, just in a fixed-width
+   track instead of a flexible one. */
+.job-progress { display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
+.job-progress-track {
+  width: 90px;
+  height: 8px;
+  background: var(--track-bg);
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: inline-block;
+}
+.job-progress-track .bar-fill { height: 100%; display: block; }
+
+/* Filters + forms */
+.filter-bar {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 1rem 0 1.25rem;
+  flex-wrap: wrap;
+}
+
+/* ---- Unified form control system --------------------------------------- */
+select,
+input[type="text"],
+input[type="date"],
+input[type="time"] {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  padding: 0.48rem 0.7rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: var(--text);
+  min-height: 36px;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+select:hover,
+input[type="text"]:hover,
+input[type="date"]:hover,
+input[type="time"]:hover {
+  border-color: var(--input-border-hover);
+}
+select:focus-visible,
+input[type="text"]:focus-visible,
+input[type="date"]:focus-visible,
+input[type="time"]:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+select:disabled,
+input:disabled { opacity: 0.55; cursor: not-allowed; }
+input::placeholder { color: var(--text-tertiary); }
+select { cursor: pointer; }
+
+/* ---- Buttons - flat Fiori fill, not a gradient (SSAT reference:
+   .btn-primary { background: var(--accent); color: #fff; }) ------------- */
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 1.15rem;
+  font-weight: 650;
+  font-size: 0.85rem;
+  font-family: inherit;
+  min-height: 36px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.12s ease, border-color 0.12s ease,
+    box-shadow 0.12s ease, transform 0.08s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary:disabled {
+  background: var(--border-strong);
+  color: var(--text-tertiary);
+  box-shadow: none;
+  cursor: default;
+  transform: none;
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--accent-text);
+  border: 1px solid var(--border-strong);
+}
+.btn-secondary:hover { background: var(--accent-soft); border-color: var(--accent-soft-border); }
+.btn-secondary:active { transform: translateY(1px); }
+.btn-secondary:disabled {
+  color: var(--text-tertiary);
+  border-color: var(--border);
+  background: var(--surface);
+  cursor: default;
+  transform: none;
+}
+
+.btn-sm { padding: 0.36rem 0.75rem; font-size: 0.78rem; min-height: 30px; }
+
+.btn-primary svg, .btn-secondary svg { flex-shrink: 0; }
+
+/* Dropdown menu (e.g. the Findings toolbar's "Export" button) - a lighter
+   popover than the modal system below, wired up by setupDropdownMenu() in
+   app.js. Markup: .menu > (.menu-trigger, .menu-panel > [role=menuitem]). */
+.menu { position: relative; }
+.menu-trigger[aria-expanded="true"] { background: var(--accent-soft); border-color: var(--accent-soft-border); }
+.menu-chevron { transition: transform 0.12s ease; }
+.menu-trigger[aria-expanded="true"] .menu-chevron { transform: rotate(180deg); }
+.menu-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 200px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 0.35rem;
+  z-index: 30;
+  animation: modal-in 0.14s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.menu-panel [role="menuitem"] {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.55rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--radius-sm);
+  background: none;
+  border: none;
+  color: var(--text);
+  text-decoration: none;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 550;
+  text-align: left;
+  cursor: pointer;
+}
+.menu-panel [role="menuitem"]:hover,
+.menu-panel [role="menuitem"]:focus-visible { background: var(--surface-hover); }
+.menu-panel [role="menuitem"] svg { color: var(--text-tertiary); flex-shrink: 0; }
+
+/* Column-visibility picker (Jobs/Recovery "Columns" menu) - checkbox items
+   in the same .menu-panel popover as the [role=menuitem] links above, but
+   deliberately not menuitems themselves: toggling one must not auto-close
+   the panel (see setupDropdownMenu()'s menuitem-click-closes behavior). */
+.menu-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.menu-checkbox-item:hover { background: var(--surface-hover); }
+.menu-checkbox-item input { cursor: pointer; }
+
+/* Excel-style column-header filter (Jobs/Recovery/Findings tables) - a
+   small icon-only trigger sitting right after a <th>'s label text, using
+   the same .menu-panel popover as everything else above. Kept visually
+   quiet at rest (low-contrast, no border) so a header row with several of
+   these doesn't look cluttered; .col-filter-active (a real filter
+   currently applied to that column) is the only state that stands out. */
+.col-filter-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-left: 0.3rem;
+  padding: 0;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  vertical-align: middle;
+}
+.col-filter-trigger:hover { background: var(--surface-hover); color: var(--text); }
+.col-filter-trigger[aria-expanded="true"] { background: var(--surface-hover); color: var(--text); }
+.col-filter-trigger.col-filter-active { color: var(--accent); }
+.col-filter-menu .menu-panel { right: auto; left: 0; min-width: 180px; }
+.col-filter-text { width: 100%; }
+
+/* Columns picker (Jobs/Recovery "Columns" button) - found in UAT: with
+   ~11 checkable columns, the panel opened tall enough to cover most of
+   the table right beneath it, making a just-toggled column's effect
+   impossible to see without first closing the dropdown. Capping the
+   height and scrolling internally keeps it from ever covering more than
+   a small band of the table, so the result stays visible alongside it. */
+.columns-picker-menu .menu-panel { max-height: 260px; overflow-y: auto; }
+
+/* A small icon-only trigger (Home tiles' "more actions") rather than the
+   full bordered pill .menu-trigger defaults to - same component, lighter
+   chrome. Placed after the generic .menu-trigger rules so this wins on
+   equal specificity via source order. */
+.tile-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+.tile-menu-trigger:hover { background: var(--surface-hover); color: var(--text); }
+.tile-menu-trigger[aria-expanded="true"] { background: var(--surface-hover); color: var(--text); border-color: transparent; }
+
+/* Evidence disclosure */
+details { margin-top: 0.4rem; }
+details summary {
+  cursor: pointer;
+  color: var(--accent-text);
+  font-size: 0.78rem;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 3px;
+}
+details summary::-webkit-details-marker { display: none; }
+details summary::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 4px solid currentColor;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transition: transform 0.12s ease;
+}
+details[open] summary::before { transform: rotate(90deg); }
+ul.evidence { margin: 0.5rem 0 0; padding-left: 1.1rem; font-size: 0.78rem; color: var(--text-secondary); }
+ul.evidence .ekey { color: var(--text); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+
+/* Modal - matches SSAT's .modal exactly: 6px radius, that specific
+   elevated shadow, same scale+translateY entrance. */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 50;
+  animation: modal-fade 0.14s ease;
+}
+.modal {
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modal-in 0.16s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+@keyframes modal-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Toast - shared confirmation for exports and write actions (delete/restore,
+   dispose, whitelist, systems - see showToast() in app.js). Deliberately
+   hidden via opacity + pointer-events only, NOT visibility/display: a
+   role="status" live region has to stay in the accessibility tree for a
+   text mutation to be announced (found in a11y review) - toggling
+   visibility off between toasts, then setting textContent before revealing
+   it again, mutates content while the node is hidden from the tree, which
+   screen readers don't reliably treat as a fresh announcement. */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 60;
+  max-width: min(26rem, calc(100vw - 2rem));
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 0.5rem);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+.toast.toast-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+/* Error variant (showErrorToast()) - replaces the native browser alert()
+   previously used for a rejected action (UAT JOB-11), same toast shape
+   with a red-tinted border/text so it still reads as distinct from a
+   plain confirmation. */
+.toast.toast-error { border-color: var(--sev-high); color: var(--sev-high); }
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.35rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+.modal-head h2 { margin: 0; font-size: 1.05rem; font-weight: 700; }
+.modal-close {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  line-height: 1;
+  color: var(--text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.modal-close:hover { background: var(--surface-hover); color: var(--text); }
+.modal-body { padding: 1.25rem 1.35rem; overflow-y: auto; }
+
+table.catalogue-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  margin-bottom: 1.1rem;
+}
+table.catalogue-table th, table.catalogue-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0.55rem;
+  text-align: left;
+}
+table.catalogue-table th {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+
+/* Found in UAT (JOB-10, GEN-08): this was styled as underlined red text,
+   which reads as a hyperlink, not a button - despite always being a real
+   <button> (never an <a>), never navigating anywhere. Now shaped like
+   .btn-secondary/.btn-sm (same padding/min-height, so it sits flush next
+   to other buttons in a toolbar) but in the danger palette, with a border
+   so it reads as clickable even before the hover state. */
+.link-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  color: var(--sev-high);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.36rem 0.75rem;
+  min-height: 30px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: background-color 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
+}
+.link-danger:hover { background: var(--sev-high-bg); border-color: var(--sev-high); }
+.link-danger:active { transform: translateY(1px); }
+.link-danger:disabled { opacity: 0.5; cursor: default; background: none; }
+
+.run-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.run-actions .link-danger,
+.run-actions .run-restore-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 30px;
+}
+
+form.catalogue-add-form {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--border-strong);
+}
+form.catalogue-add-form input[name="code"] { width: 150px; text-transform: uppercase; }
+form.catalogue-add-form input[name="description"] { flex: 1; min-width: 180px; }
+
+/* Disposition (findings persistence & whitelist) */
+.disp-form {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+.disp-form select, .disp-form input[type="text"] { font-size: 0.78rem; padding: 0.34rem 0.5rem; min-height: 30px; }
+.disp-form input[name="reason"], .disp-reason { width: 120px; }
+.disp-error { font-size: 0.75rem; margin: 0; }
+#syncResult { display: inline-flex; align-items: center; }
+#syncResult p { margin: 0; font-size: 0.8rem; }
+
+/* Empty states - dashed, centered card instead of a bare line of text */
+#findingsBody > p.muted,
+#runsBody > p.muted,
+#activityBody > p.muted,
+#jobsBody > p.muted,
+.panel > p.muted,
+.modal-body > p.muted {
+  text-align: center;
+  margin: 0.5rem 0 0;
+  padding: 2.25rem 1.25rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface-alt);
+  color: var(--text-secondary);
+}
+
+/* Loading skeletons */
+.skeleton {
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, var(--skeleton-a) 25%, var(--skeleton-b) 37%, var(--skeleton-a) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.3s ease infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}

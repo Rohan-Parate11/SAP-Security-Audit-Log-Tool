@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAL - Security Audit Log Tool</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230a6ed1'/%3E%3Cpath d='M12 3.4 L18.3 5.9 C19.1 6.2 19.6 6.9 19.6 7.8 C19.6 13.6 16.9 18.6 12 21.1 C7.1 18.6 4.4 13.6 4.4 7.8 C4.4 6.9 4.9 6.2 5.7 5.9 Z' fill='white'/%3E%3Cpath d='M8.6 12.4 11 15 16.2 8.8' fill='none' stroke='%230a6ed1' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ style_css_version }}">
+</head>
+<body>
+  <a class="skip-link" href="#app">Skip to main content</a>
+  <header class="shellbar">
+    <a class="shellbar-left shellbar-brand" href="#/home" title="Home - choose a system">
+      <div class="shellbar-logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3.4 L18.3 5.9 C19.1 6.2 19.6 6.9 19.6 7.8 C19.6 13.6 16.9 18.6 12 21.1 C7.1 18.6 4.4 13.6 4.4 7.8 C4.4 6.9 4.9 6.2 5.7 5.9 Z"/>
+          <path d="M8.6 12.4 11 15 16.2 8.8"/>
+        </svg>
+      </div>
+      <span class="shellbar-title">SAL</span>
+    </a>
+    <div class="shellbar-right">
+      <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme" title="Switch color theme"></button>
+      <span id="actorLabel" class="actor-label" role="button" tabindex="0" title="Click to change"></span>
+      <label class="sr-only" for="systemSelect">SAP system</label>
+      <select id="systemSelect" class="system-select"></select>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidenav" aria-label="Primary">
+      <span class="sidenav-section">Monitoring</span>
+      <a href="#/dashboard" data-route="/dashboard">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        Dashboard
+      </a>
+      <a href="#/findings" data-route="/findings">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4"/><path d="M12 17h.01"/>
+        </svg>
+        Findings
+      </a>
+
+      <span class="sidenav-section">Data Collection</span>
+      <a href="#/collect" data-route="/collect">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 19h14"/>
+        </svg>
+        Collect
+      </a>
+      <a href="#/jobs" data-route="/jobs">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 6h11"/><path d="M9 12h11"/><path d="M9 18h11"/>
+          <path d="m4 6 1 1 2-2"/><path d="m4 12 1 1 2-2"/><path d="m4 18 1 1 2-2"/>
+        </svg>
+        Jobs
+      </a>
+      <a href="#/recovery" data-route="/recovery">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>
+        </svg>
+        Recovery
+      </a>
+
+      <span class="sidenav-section">System Health</span>
+      <a href="#/coverage" data-route="/coverage">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2 3 6v6c0 5.2 3.8 9.9 9 11 5.2-1.1 9-5.8 9-11V6l-9-4Z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+        Coverage
+      </a>
+      <a href="#/connection" data-route="/connection">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 2v4"/><path d="M15 2v4"/><path d="M7 8h10v4a5 5 0 0 1-10 0V8Z"/><path d="M12 17v5"/>
+        </svg>
+        Connection
+      </a>
+      <a href="#/retention" data-route="/retention">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/>
+          <path d="M19 6v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6"/><path d="M14 11v6"/>
+        </svg>
+        Retention
+      </a>
+      <a href="#/activity" data-route="/activity">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+        </svg>
+        Activity
+      </a>
+    </nav>
+
+    <main id="app" tabindex="-1">
+      <div class="skeleton" style="height:160px"></div>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}?v={{ app_js_version }}"></script>
+</body>
+</html>
