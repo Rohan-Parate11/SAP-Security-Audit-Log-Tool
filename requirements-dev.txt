@@ -1,0 +1,6 @@
+-r requirements.txt
+pytest==8.3.4
+
+# Doc tooling only (scripts/render_training_pdfs.py) - not imported by sal/
+Markdown==3.10.3
+xhtml2pdf==0.2.18
