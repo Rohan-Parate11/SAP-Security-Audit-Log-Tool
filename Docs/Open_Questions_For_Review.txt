@@ -1,0 +1,51 @@
+SAL - Open Questions / Decisions Needing Your Input
+Compiled: 2026-09-09. Last updated 2026-09-23.
+Decisions and their reasoning are recorded in PROJECT-CONTEXT.md,
+ARCHITECTURE.md, Phases.md, and Memory.md, not kept here as a stale
+answered log - only genuinely open items stay in this file.
+====================================================================
+
+OPEN:
+
+- How should an AI component fit into SAL? Phase H in Phases.md ("LLM
+  layer - natural-language query, summaries", deliberately sequenced
+  last, not started) is already the planned home for this, but HOW it
+  should actually show up hasn't been discussed with the project owner
+  yet. To cover when this comes up:
+  - What does it do - natural-language Q&A over findings/dashboard data
+    ("how many High findings are open for S23?"), auto-generated
+    plain-English summaries of a review period, both, or something
+    else entirely?
+  - Where does it run - an external LLM API (which vendor/model, and
+    does sending SAP-derived security data to a third-party API sit
+    okay with this project's read-only/self-contained posture), or
+    something self-hosted/local?
+  - How far does it reach - read-only reporting/summarization only
+    (matches the project's existing detection-only stance cleanly), or
+    something more active like drafting a first-pass disposition
+    suggestion for a human to confirm?
+  - Not started - flagged here so it gets a real discussion before
+    Phase H work begins, not decided by default along the way.
+
+--------------------------------------------------------------------
+
+Previously answered items (kept for reference, not currently open):
+
+Both items previously listed here have been answered by the project
+owner and implemented (see Docs/Memory.md items 5 and 16, and
+Docs/CHANGELOG.md's 2026-09-16 entries, for the reasoning):
+
+- Central SAP credential vault - built as sal/credentials.py, a
+  central, encrypted (Fernet) credential store reachable from Home's
+  new "Password Manager" page. Reverses this project's original
+  .env-only stance, a deliberate and informed decision, not an
+  oversight - the owner was shown the tradeoff (no RBAC means anyone
+  who can reach the app can reach every centrally-stored password) and
+  chose to proceed, specifying the password stay viewable through the
+  UI and that .env keep working unchanged for any system not yet
+  migrated to the new store.
+- Recurring, filtered collection - built as sal/filtered_schedule.py,
+  a genuinely separate, supplementary capability (any number of saved
+  filtered pulls per system, each with its own cadence) alongside the
+  existing comprehensive baseline schedule, which remains unfiltered
+  by construction as before.
